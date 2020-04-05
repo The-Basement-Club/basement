@@ -1,0 +1,3 @@
+[submodule "docker/php/libvirt-php"]
+	path = docker/php/libvirt-php
+	url = https://github.com/austinkregel/libvirt-php
