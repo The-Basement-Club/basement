@@ -36,7 +36,7 @@ export default [
             authenticatedRoute('/logout', './routes/Auth/Logout'),
             unauthenticatedRoute('/register', './routes/Auth/Register'),
 
-            authenticatedRoute('/hypervisors', './routes/Hypervisors'),
+            authenticatedRoute('/hypervisors', './routes/App/Hypervisors'),
 
             unauthenticatedRoute('*', './routes/UnknownRoute'),
         ],

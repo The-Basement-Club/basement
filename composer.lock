@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79ab5df75ca00b17346f6cc57004d686",
+    "content-hash": "e1dfddf42e7a77c3e3ea764896e0a707",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1227,6 +1227,141 @@
             "time": "2020-03-11T21:05:07+00:00"
         },
         {
+            "name": "graham-campbell/digitalocean",
+            "version": "v6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GrahamCampbell/Laravel-DigitalOcean.git",
+                "reference": "2deff738eed5d1444005f23d1bf390ba31112592"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-DigitalOcean/zipball/2deff738eed5d1444005f23d1bf390ba31112592",
+                "reference": "2deff738eed5d1444005f23d1bf390ba31112592",
+                "shasum": ""
+            },
+            "require": {
+                "graham-campbell/manager": "^4.5",
+                "illuminate/contracts": "^6.0|^7.0",
+                "illuminate/support": "^6.0|^7.0",
+                "php": "^7.2.5",
+                "toin0u/digitalocean-v2": "^2.3"
+            },
+            "require-dev": {
+                "graham-campbell/analyzer": "^3.0",
+                "graham-campbell/testbench": "^5.4",
+                "guzzlehttp/guzzle": "^6.3",
+                "kriswallsmith/buzz": "^0.15",
+                "mockery/mockery": "^1.3.1",
+                "phpunit/phpunit": "^8.5|^9.0"
+            },
+            "suggest": {
+                "guzzlehttp/guzzle": "Enables the guzzlehttp connector.",
+                "kriswallsmith/buzz": "Enables the buzz connector."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "6.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "GrahamCampbell\\DigitalOcean\\DigitalOceanServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GrahamCampbell\\DigitalOcean\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com"
+                }
+            ],
+            "description": "DigitalOcean Is A DigitalOcean Bridge For Laravel",
+            "keywords": [
+                "Bridge",
+                "DigitalOceanV2",
+                "Graham Campbell",
+                "GrahamCampbell",
+                "Laravel DigitalOcean",
+                "Laravel-DigitalOcean",
+                "digitalocean",
+                "digitalocean bridge",
+                "digitalocean-v2",
+                "framework",
+                "laravel"
+            ],
+            "time": "2020-03-01T11:48:06+00:00"
+        },
+        {
+            "name": "graham-campbell/manager",
+            "version": "v4.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GrahamCampbell/Laravel-Manager.git",
+                "reference": "36e856bb6d56a079e7bb7ef4eb47c21d0dedd5c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Manager/zipball/36e856bb6d56a079e7bb7ef4eb47c21d0dedd5c9",
+                "reference": "36e856bb6d56a079e7bb7ef4eb47c21d0dedd5c9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^5.5|^6.0|^7.0",
+                "illuminate/support": "^5.5|^6.0|^7.0",
+                "php": "^7.1.3"
+            },
+            "require-dev": {
+                "graham-campbell/analyzer": "^2.4|^3.0",
+                "graham-campbell/testbench-core": "^3.1",
+                "mockery/mockery": "^1.3.1",
+                "phpunit/phpunit": "^6.5|^7.5|^8.4|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GrahamCampbell\\Manager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com"
+                }
+            ],
+            "description": "Manager Provides Some Manager Functionality For Laravel",
+            "keywords": [
+                "Graham Campbell",
+                "GrahamCampbell",
+                "Laravel Manager",
+                "Laravel-Manager",
+                "connector",
+                "framework",
+                "interface",
+                "laravel",
+                "manager"
+            ],
+            "time": "2020-03-01T11:25:27+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.5.2",
             "source": {
@@ -1570,6 +1705,111 @@
                 "schema"
             ],
             "time": "2019-09-25T14:49:45+00:00"
+        },
+        {
+            "name": "kregel/basement-common",
+            "version": "0.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/austinkregel/basement-common.git",
+                "reference": "8fdaea46291357610e264fc6fbc5f255f4ee9ce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/austinkregel/basement-common/zipball/8fdaea46291357610e264fc6fbc5f255f4ee9ce7",
+                "reference": "8fdaea46291357610e264fc6fbc5f255f4ee9ce7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^7.4",
+                "illuminate/support": "^7.4",
+                "php": "~7.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kregel\\Basement\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "austin@kregel.co",
+                    "homepage": "https://austinkregel.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package is just some interfaces used by thebasement.club. Anyone is welcome to build services that conform to the interfaces and suggest them to be included in the main site by creating an issue.",
+            "homepage": "https://github.com/austinkregel/basement-common",
+            "keywords": [
+                "thebasement.club"
+            ],
+            "time": "2020-04-07T06:03:34+00:00"
+        },
+        {
+            "name": "kregel/basement-digitalocean",
+            "version": "0.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/austinkregel/basement-digitalocean.git",
+                "reference": "5e784e91d85bf2fbfc2712fab2a5578e70427758"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/austinkregel/basement-digitalocean/zipball/5e784e91d85bf2fbfc2712fab2a5578e70427758",
+                "reference": "5e784e91d85bf2fbfc2712fab2a5578e70427758",
+                "shasum": ""
+            },
+            "require": {
+                "graham-campbell/digitalocean": "^6.0",
+                "guzzlehttp/guzzle": "^6.5",
+                "kregel/basement-common": "^0.0.7",
+                "php": "~7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=8.0",
+                "vlucas/phpdotenv": "^4.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Kregel\\Basement\\DigitalOcean\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Austin Kregel",
+                    "email": "security@austinkregel.com",
+                    "homepage": "https://github.com/austinkregel",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The Basement server package for Digital Ocean",
+            "homepage": "https://github.com/kregel/basement-digitalocean",
+            "keywords": [
+                "basement-digitalocean",
+                "kregel",
+                "thebasement.club"
+            ],
+            "time": "2020-04-07T06:42:25+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1976,16 +2216,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "75542a366ccbe1896ed79fcf3e8e68206d6c4257"
+                "reference": "5a67afc2572ec6d430526cdc9c637ef124812389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/75542a366ccbe1896ed79fcf3e8e68206d6c4257",
-                "reference": "75542a366ccbe1896ed79fcf3e8e68206d6c4257",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/5a67afc2572ec6d430526cdc9c637ef124812389",
+                "reference": "5a67afc2572ec6d430526cdc9c637ef124812389",
                 "shasum": ""
             },
             "require": {
@@ -2046,7 +2286,7 @@
                 "md",
                 "parser"
             ],
-            "time": "2020-03-25T19:55:28+00:00"
+            "time": "2020-04-05T16:01:48+00:00"
         },
         {
             "name": "league/flysystem",
@@ -4519,6 +4759,74 @@
             "time": "2019-10-24T08:53:34+00:00"
         },
         {
+            "name": "toin0u/digitalocean-v2",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/toin0u/DigitalOceanV2.git",
+                "reference": "0e8e134060ba8ed4944ececd0d4b1f7c79313910"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/toin0u/DigitalOceanV2/zipball/0e8e134060ba8ed4944ececd0d4b1f7c79313910",
+                "reference": "0e8e134060ba8ed4944ececd0d4b1f7c79313910",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "guzzle/guzzle": "^3.7",
+                "guzzlehttp/guzzle": "^5.3|^6.3",
+                "kriswallsmith/buzz": "^0.16",
+                "phpspec/phpspec": "^2.5"
+            },
+            "suggest": {
+                "guzzle/guzzle": "To use GuzzleAdapter, require guzzle/guzzle:^3.7.",
+                "guzzlehttp/guzzle": "To use GuzzleHttpAdapter, require guzzlehttp/guzzle:^5.3|^6.3.",
+                "kriswallsmith/buzz": "To use BuzzAdapter, require kriswallsmith/buzz:^0.16."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DigitalOceanV2\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Antoine Corcy",
+                    "email": "contact@sbin.dk",
+                    "homepage": "http://sbin.dk",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Yassir Hannnoun",
+                    "email": "yassir.hannoun@gmail.com",
+                    "homepage": "https://yassirh.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "DigitalOcean API v2 PHP 5.4+ library",
+            "homepage": "https://github.com/toin0u/DigitalOceanV2",
+            "keywords": [
+                "Cloud Hosting",
+                "SSD",
+                "api",
+                "digitalocean",
+                "vps"
+            ],
+            "time": "2019-01-27T21:16:56+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v4.1.3",
             "source": {
@@ -5191,28 +5499,28 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v4.1.3",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "a430bce33d1ad07f756ea6cae9afce9ef8670b42"
+                "reference": "d50490417eded97be300a92cd7df7badc37a9018"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/a430bce33d1ad07f756ea6cae9afce9ef8670b42",
-                "reference": "a430bce33d1ad07f756ea6cae9afce9ef8670b42",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/d50490417eded97be300a92cd7df7badc37a9018",
+                "reference": "d50490417eded97be300a92cd7df7badc37a9018",
                 "shasum": ""
             },
             "require": {
                 "facade/ignition-contracts": "^1.0",
                 "filp/whoops": "^2.4",
-                "jakub-onderka/php-console-highlighter": "^0.4",
                 "php": "^7.2.5",
                 "symfony/console": "^5.0"
             },
             "require-dev": {
                 "facade/ignition": "^2.0",
                 "fideloper/proxy": "^4.2",
+                "friendsofphp/php-cs-fixer": "^2.16",
                 "fruitcake/laravel-cors": "^1.0",
                 "laravel/framework": "^7.0",
                 "laravel/tinker": "^2.0",
@@ -5257,7 +5565,7 @@
                 "php",
                 "symfony"
             ],
-            "time": "2020-03-07T12:46:00+00:00"
+            "time": "2020-04-04T19:56:08+00:00"
         },
         {
             "name": "phar-io/manifest",

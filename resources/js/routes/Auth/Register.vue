@@ -7,8 +7,8 @@
                 </router-link>
                 <div>
                     <label class="text-sm text-white mt-4 block">Name</label>
-                    <div class="w-full relative text-white focus-within:text-red-500 mt-2">
-                        <input v-model="form.name" name="name" placeholder="John Smith" class="block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
+                    <div class="w-full relative mt-2">
+                        <input v-model="form.name" name="name" placeholder="John Smith" class="text-red-700 block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
                     </div>
                     <div v-if="form.instance.hasErrors('name')" class="mt-2 w-full text-white text-sm italic">
                         {{ form.instance.error('name')}}
@@ -16,8 +16,8 @@
                 </div>
                 <div>
                     <label class="text-sm text-white mt-4 block">Email</label>
-                    <div class="w-full relative text-white focus-within:text-red-500 mt-2">
-                        <input v-model="form.email" name="email" placeholder="john@example.com" class="block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
+                    <div class="w-full relative mt-2">
+                        <input v-model="form.email" name="email" placeholder="john@example.com" class="text-red-700 block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
                     </div>
                     <div v-if="form.instance.hasErrors('email')" class="mt-2 w-full text-white text-sm italic">
                         {{ form.instance.error('email')}}
@@ -25,8 +25,8 @@
                 </div>
                 <div>
                     <label class="text-sm text-white mt-4 block">Password</label>
-                    <div class="w-full relative text-white focus-within:text-red-500 mt-2">
-                        <input v-model="form.password" name="password" type="password" placeholder="************" class="block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
+                    <div class="w-full relative mt-2">
+                        <input v-model="form.password" name="password" type="password" placeholder="************" class="text-red-700 block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500 focus:outline-none" />
                     </div>
                     <div v-if="form.instance.hasErrors('password')" class="mt-2 w-full text-white text-sm italic">
                         {{ form.instance.error('password')}}
@@ -34,8 +34,8 @@
                 </div>
                 <div>
                     <label class="text-sm text-white mt-4 block">Confirm password</label>
-                    <div class="w-full relative text-white focus-within:text-red-500 mt-2">
-                        <input v-model="form.password_confirmation " name="password_confirmation" type="password" placeholder="**********" class="block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
+                    <div class="w-full relative focus-within:text-red-500 mt-2">
+                        <input v-model="form.password_confirmation " name="password_confirmation" type="password" placeholder="**********" class="text-red-700 block w-full rounded pr-12 pl-4 py-2 text-lg border-3 border-transparent bg-gray-200 focus:border-red-500  focus:outline-none" />
                     </div>
                     <div v-if="form.instance.hasErrors('password_confirmation ')" class="mt-2 w-full text-white text-sm italic">
                         {{ form.instance.error('password_confirmation ')}}
@@ -67,9 +67,6 @@
         auth: true,
         data() {
             return {
-                social: {
-                    googleRedirectUrl: ''
-                },
                 form: {
                     name: '',
                     email: '',
@@ -88,11 +85,6 @@
                     this.form.instance.setErrors(e.validationErrors)
                 }
             }
-        },
-        async created() {
-            let { data: { redirect_url } } = await axios.get('/auth/login/google');
-
-            this.social.googleRedirectUrl = redirect_url;
         }
     }
 </script>

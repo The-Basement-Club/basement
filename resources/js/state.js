@@ -80,12 +80,16 @@ export default {
             }
         },
         async getCurrentUser({ commit }, options = {}) {
-            let { data: user } = await axios.get('/api/user', Object.assign(options, {}));
+            try {
+                let { data: user } = await axios.get('/api/user', Object.assign(options, {}));
 
-            await commit('setGeneric', {
-                currentUser: user,
-                isLoggedIn: true
-            });
+                await commit('setGeneric', {
+                    currentUser: user,
+                    isLoggedIn: true
+                });
+            } catch (e) {
+
+            }
         },
         async register({ state, getters, commit }, {
             name,
@@ -136,9 +140,12 @@ export default {
             }
         },
         async logout({ dispatch }) {
+            if (app.$route.fullPath !== '/login') {
+                app.$router.push('/login');
+            }
+
             await axios.get('/auth/logout');
             await dispatch('clearExistingToken')
-            app.$router.push('/login');
         },
         async authorizeSocialCallback({ state, commit, dispatch }, { app, providerType }) {
             await dispatch('checkIfWeAreLoggedIn', { app })

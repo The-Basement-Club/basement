@@ -17,14 +17,5 @@
                 return !routeConstants.routesThatShouldRedirectToHomePageIfLoggedIn.includes(this.$route.fullPath);
             }
         },
-        async created() {
-            await this.$store.dispatch('checkIfWeAreLoggedIn', { app })
-
-            const isAuthenticated = this.$store.getters.isLoggedIn;
-
-            if (routeConstants.routesThatShouldRedirectToHomePageIfLoggedIn.includes(this.$route.path) && isAuthenticated) {
-                this.$router.push(routeConstants.homePage);
-            }
-        }
     }
 </script>

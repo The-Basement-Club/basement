@@ -7,6 +7,7 @@ import VueToasted from 'vue-toasted';
 import { buildUrl } from '@kbco/query-builder';
 import routeConstants from "./routeConstants";
 import moment from 'moment';
+import Cookie from 'js-cookie'
 
 window.moment = moment;
 window.buildUrl = buildUrl;
@@ -66,12 +67,12 @@ window.setupAxios = () => {
         setupAxios();
     }
 
-    window.axios.interceptors.response.use((response) => response, function (err) {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-            app.$store.dispatch(Const.AUTH_LOGOUT)
+    window.axios.interceptors.response.use((response) => response, async function (err) {
+        if (err.status === 401 || err.config && !err.config.__isRetryRequest) {
+            await app.$store.dispatch(Const.AUTH_LOGOUT)
+        } else {
+            app.$toasted.error(err?.response?.data?.message);
         }
-        app.$toasted.error(err?.response?.data?.message);
-
         return Promise.reject(err);
     });
 }

@@ -5,7 +5,7 @@ A single administrative dashboard for your domains, hypervisors, and servers.
 Manage Servers Via
  - [ ] Digital Ocean
  - [ ] Vultr
- - [ ] Libvirt
+ - [ ] Libvirt?
  - [ ] ?
  
 Manage Domains Via 
@@ -21,4 +21,5 @@ Manage Domains Via
  - [ ] Execute scripts on multiple servers at once
  - [ ] Schedule scripts to be ran on servers
  - [ ] Notifications based on metrics from servers.
- 
+ - [ ] A Server/Hypervisor client which can gather information from servers
+ - [ ] A Hypervisor client which can help provision resources.
