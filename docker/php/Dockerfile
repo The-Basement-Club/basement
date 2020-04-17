@@ -35,7 +35,7 @@ RUN apt-get -y install wget \
   && apt-get clean -y \
   && rm -rf /var/lib/apt/lists/* \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen --purge \
-  && pecl install -o -f redis \
+  && pecl install redis \
   && rm -rf /tmp/pear \
   && docker-php-ext-enable redis \
   && mkdir -p /etc/nginx/conf.d

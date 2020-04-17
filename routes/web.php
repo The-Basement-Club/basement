@@ -13,48 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/auth/login', function( ){
-    $email = Request::get('email');
-    $password = Request::get('password');
-
-    if (Auth::attempt(['email' => $email, 'password' => $password])) {
-        return response()->json([], 200);
-    }
-
-    return response()->json([
-        'error' => 'invalid_credentials'
-    ], 403);
+Route::domain('link.'.config('app.domain'))->group(function() {
+    Route::get('server/{credential:uuid}', App\Http\Controllers\Servers\Link::class);
+    Route::get('ip', App\Http\Controllers\Servers\Ip::class);
 });
-Route::get('/auth/logout', function (){
-    Auth::guard('web')->logout();
-   return [
-       'message' => 'Success'
-   ];
-})->middleware('auth:sanctum');
-Route::post('/auth/register', function (\Illuminate\Http\Request $request){
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8'
-    ]);
 
-    $name = $request->get('name');
-    $email = $request->get('email');
-    $password = $request->get('password');
+Route::post('/auth/login', App\Http\Controllers\Auth\LoginController::class.'@login')->name('login');
+Route::get('/auth/logout', App\Http\Controllers\Auth\LoginController::class.'@logout')->name('logout');
+Route::post('/auth/register', App\Http\Controllers\Auth\RegisterController::class.'@register')->name('register');
 
-    App\User::create([
-        'name' => $name,
-        'email' => $email,
-        'password' => bcrypt($password),
-    ]);
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-    if (Auth::attempt(['email' => $email, 'password' => $password])) {
-        return response()->json('', 204 );
-    }
-    return response()->json([
-        'error' => 'invalid_credentials'
-    ], 403);
-});
-Route::get('/{url}', function (){
+Route::get('/{url}', function () {
     return view('index');
-})->where('url', '^((?!(auth|api)).)*$');
+})->where('url', '^((?!(auth|api)).)*$')->name('spa');

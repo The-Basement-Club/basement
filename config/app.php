@@ -52,6 +52,8 @@ return [
     |
     */
 
+    'domain' => env('APP_DOMAIN', null),
+
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('APP_URL', null),
@@ -171,10 +173,10 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        Vkovic\LaravelCustomCasts\CustomCastsServiceProvider::class,
     ],
 
     /*
