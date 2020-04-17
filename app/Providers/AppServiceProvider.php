@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Contracts\Repositories\CredentialRepositoryContract;
+use App\Contracts\Services\ServerServiceFactoryContract;
+use App\PersonalAccessToken;
+use App\Repositories\CredentialRepository;
+use App\Services\ServerServiceFactory;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ServerServiceFactoryContract::class, ServerServiceFactory::class);
+        $this->app->bind(CredentialRepositoryContract::class, CredentialRepository::class);
     }
 
     /**
@@ -23,6 +30,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
     }
 }

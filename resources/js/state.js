@@ -3,41 +3,26 @@ import routeConstants from "./routeConstants";
 
 export default {
     state: {
-        token: localStorage.getItem('token'),
         isLoggedIn: false,
         registerWith: '',
         busy: false,
         currentUser: null,
-        categories: [],
         claims: [],
+        credentials: [],
+        servers: {}
     },
     getters: {
         busy: (state) => state.busy,
         isLoggedIn: (state) => state.isLoggedIn,
         registerWith: state => state.registerWith,
-        tokenExpired(state) {
-            const token = state.token
-            // Token should always be set.
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            const parsedToken = JSON.parse(jsonPayload)
-
-            const expDateFromToken = new Date(parsedToken.exp * 1000);
-            const now = new Date();
-            const diff = (expDateFromToken.getTime() - now.getTime()) / 1000;
-            const seconds = Math.abs(diff);
-
-            return seconds <= 0;
-        },
-        tokenValidSize: state => state.token.split('.').length === 3,
         currentUser: (state) => state.currentUser,
         token: (state) => state.token,
-        categories: state => state.categories,
-        claims: state => state.claims
+        credentials: state => state.credentials,
+        servers: state => Object.values(state.servers).flat(),
+        claims: state => state.claims,
+        schema: () => process.env.MIX_APP_SCHEMA,
+        domain: () => process.env.MIX_APP_DOMAIN,
+        url: () => process.env.MIX_APP_URL,
     },
     mutations: {
         setGeneric(state, thingsToSet = {}) {
@@ -55,15 +40,25 @@ export default {
         },
     },
     actions: {
+        async initialize({ state, getters, dispatch }) {
+            if (!state.currentUser) {
+                return ;
+            }
+
+            Echo.channel('App.User.'+state.currentUser.id)
+
+            await Promise.all(getters.credentials.map(async credential => await dispatch('findAllServers', { id: credential.id})))
+        },
         async clearExistingToken({ commit }) {
             commit('setGeneric', { isLoggedIn: false });
             commit('setToken', '')
         },
         async checkIfWeAreLoggedIn({ state, getters, commit, dispatch }, { app }) {
-             if (getters.currentUser) {
+             if (getters.currentUser && getters.isLoggedIn) {
                 commit('setGeneric', { isLoggedIn: true });
                 return;
             }
+            commit('setGeneric', { busy: true })
 
             try {
                 await dispatch('getCurrentUser', {
@@ -72,6 +67,7 @@ export default {
                     }
                 });
             } catch (e) {
+                commit('setGeneric', { busy: false })
                 if (app.$route) {
                     if (!app.$route.path.includes('/login') && !app.$route.path.includes('/auth/register')) {
                         app.$router.push('/login')
@@ -79,16 +75,20 @@ export default {
                 }
             }
         },
-        async getCurrentUser({ commit }, options = {}) {
+        async getCurrentUser({ commit, dispatch }, options = {}) {
+            commit('setGeneric', { busy: true })
             try {
                 let { data: user } = await axios.get('/api/user', Object.assign(options, {}));
 
                 await commit('setGeneric', {
                     currentUser: user,
-                    isLoggedIn: true
+                    isLoggedIn: true,
+                    busy: false,
                 });
-            } catch (e) {
 
+                await dispatch('findAllCredentials')
+            } catch (e) {
+                commit('setGeneric', { busy: false })
             }
         },
         async register({ state, getters, commit }, {
@@ -97,6 +97,7 @@ export default {
             password,
             password_confirmation
         }) {
+            commit('setGeneric', { busy: true })
             try {
                 let { data: payload } = await axios.post('/auth/register', {
                     name,
@@ -111,6 +112,8 @@ export default {
                 if (e.response.status === 422) {
                     throw new ValidationError(e.response.data.errors);
                 }
+            } finally {
+                commit('setGeneric', { busy: false })
             }
         },
         async login({ state, dispatch, commit }, {
@@ -118,11 +121,13 @@ export default {
             password,
             router
         }) {
+            commit('setGeneric', { busy: true })
             try {
                 await axios.get('/sanctum/csrf-cookie')
 
                 await axios.post('/auth/login', { email, password });
                 setupAxios()
+
                 await dispatch('getCurrentUser');
                 router.push(routeConstants.homePage);
             } catch (e) {
@@ -137,94 +142,55 @@ export default {
                 }
 
                 throw e;
+            } finally {
+                commit('setGeneric', { busy: false })
             }
         },
         async logout({ dispatch }) {
+            await axios.get('/auth/logout');
+            await dispatch('clearExistingToken')
+
             if (app.$route.fullPath !== '/login') {
                 app.$router.push('/login');
             }
-
-            await axios.get('/auth/logout');
-            await dispatch('clearExistingToken')
         },
-        async authorizeSocialCallback({ state, commit, dispatch }, { app, providerType }) {
-            await dispatch('checkIfWeAreLoggedIn', { app })
+        async findAllServers({ commit, state }, { id }) {
+            commit('setGeneric', { busy: true})
             try {
-                const { data } =  await axios.get(buildUrl('auth/callback/' + providerType, app.$route.query));
+                const { data: { data: servers } } = await axios.get('/api/servers/' + id);
 
-                await commit('setToken', data.token)
+                const s = { ...state.servers, ...{
+                    [id]: servers
+                }};
 
-                await dispatch('getCurrentUser');
-
-                app.$router.push(data.redirect_url)
+                commit('setGeneric', { servers: s })
             } catch (e) {
-                // Most likely it's some kind of authentication exception... :thinking:
-                app.$toasted.error(e)
-                // app.$router.push(HOME_PAGE)
-                return null;
+                console.log('No servers found')
+            } finally {
+                setTimeout(() => commit('setGeneric', { busy: false}), 250)
             }
         },
-        async findAllCategories({ commit }) {
-            const { data: categories } = await axios.get('/api/categories')
-
-            commit('setGeneric', { categories })
-        },
-        async findAllClaims({ state, commit }, { sortDirection, categories = [], query = ''}) {
+        async findAllCredentials({ commit }) {
+            commit('setGeneric', { busy: true})
             try {
-                const expand = {
-                    'statements.children.children': '*',
-                    'category': '*'
-                };
-
-                const search = Object.assign(categories.length > 0 ? {
-                        category_id: 'in,' + categories.join(',')
-                    } : {},
-                    query.length > 0 ? {
-                        title: 'like,*'+query+'*'
-                    } : {});
-
-                const { data } = await axios.get(buildUrl('/api/claims', Object.assign({
-                    expand,
-                    search,
-                    order_by: sortDirection
-                })));
-                commit('setGeneric', {
-                    claims: data
-                })
+                const { data: credentials } = await axios.get('/api/credentials');
+                commit('setGeneric', { credentials })
             } catch (e) {
-                app.$toasted.error('We failed to get the claims, try refreshing the page.')
+                console.log('No credentials found')
+            } finally {
+                setTimeout(() => commit('setGeneric', { busy: false}), 250)
             }
         },
-        async createClaim({ state, commit }, {
-            title,
-            source,
-            category_id,
-            text,
-        }) {
+        async deleteServer({ commit }, { id }) {
+            commit('setGeneric', { busy: true})
             try {
-                let { data: claim } = await axios.post('/api/claims', {
-                    title,
-                    source,
-                    category_id,
-                    user_id: state.currentUser.id
-                });
+                const { data: { message } } = await axios.delete('/api/servers/'+id);
 
-                let { data: statement } = await axios.post('/api/statements', {
-                    claim_id: claim.id,
-                    text,
-                    source,
-                    user_id: state.currentUser.id,
-                    side: 'support',
-                })
-
-                app.$toasted.success("You've declared your statement!")
-                app.$router.push(HOME_PAGE);
+                app.$toasted.success(message)
             } catch (e) {
-                if (e.response.status === 422) {
-                    throw new ValidationError(e.response.data.errors);
-                }
-
-                throw e;
+                console.log('No credentials found')
+            } finally {
+                setTimeout(() => commit('setGeneric', { busy: false}), 250)
             }
         }
     }

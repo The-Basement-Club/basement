@@ -7,8 +7,33 @@ import VueToasted from 'vue-toasted';
 import { buildUrl } from '@kbco/query-builder';
 import routeConstants from "./routeConstants";
 import moment from 'moment';
-import Cookie from 'js-cookie'
+import Model from './Model'
+import Echo from "laravel-echo"
+window.Pusher = require('pusher-js')
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'b3c61d17480acbaa3dfb',
+    cluster: 'mt1',
+    forceTLS: true,
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                    .then(response => {
+                        callback(false, response.data);
+                    })
+                    .catch(error => {
+                        callback(true, error);
+                    });
+            }
+        };
+    },
+});
 
+window.Model = Model;
 window.moment = moment;
 window.buildUrl = buildUrl;
 window.Form = class Form {
@@ -55,9 +80,6 @@ window.setupAxios = () => {
 
     window.axios = axios.create({
         baseURL: process.env.MIX_APP_URL || 'you-need-to-set-your-app-url',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        }
     });
     window.axios.defaults.withCredentials = true;
 
@@ -68,8 +90,8 @@ window.setupAxios = () => {
     }
 
     window.axios.interceptors.response.use((response) => response, async function (err) {
-        if (err.status === 401 || err.config && !err.config.__isRetryRequest) {
-            await app.$store.dispatch(Const.AUTH_LOGOUT)
+        if (err.status === 401) {
+            await app.$store.dispatch('logout')
         } else {
             app.$toasted.error(err?.response?.data?.message);
         }
@@ -89,6 +111,10 @@ export default (Vue) => {
         containerClass: 'm-8'
     });
 
+    Vue.filter('date', value => {
+        return moment(value).format('MMMM Do, Y hh:mma')
+    })
+
     // This will automatically register .vue files as components based on the file name.
     const files = require.context('./components', true, /\.vue$/i);
     files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
@@ -107,12 +133,14 @@ export default (Vue) => {
                     $router: router
                 }
             })
+
+            if (!store.getters.isLoggedIn) {
+                return router.push('/login')
+            }
         }
 
-        const isAuthenticated = store.getters.isLoggedIn;
-
         // If we're going to the login page, and we're already logged in, we should just redirect to the home page.
-        if (routeConstants.routesThatShouldRedirectToHomePageIfLoggedIn.includes(to.path) && isAuthenticated) {
+        if (routeConstants.routesThatShouldRedirectToHomePageIfLoggedIn.includes(to.path) && store.getters.isLoggedIn) {
             return router.push(routeConstants.homePage)
         }
 

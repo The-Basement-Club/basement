@@ -2,12 +2,19 @@
 
 namespace App\Http\Requests\Server;
 
+use App\Http\Requests\AbstractRequest;
 use App\Http\Requests\AuthorizedViaCredential;
-use App\Http\Requests\BuildValidatorForVendor;
-use App\Http\Requests\NoRules;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\RulesForDoingThingsOnServer;
+use App\PersonalAccessToken;
 
-class PowerOffRequest extends FormRequest
+class PowerOffRequest extends AbstractRequest
 {
-    use AuthorizedViaCredential, NoRules;
+    use RulesForDoingThingsOnServer, AuthorizedViaCredential {
+        authorize as authorizeCredentials;
+    }
+
+    public function authorize()
+    {
+        return $this->authorizeCredentials() && $this->user()->tokenCan(PersonalAccessToken::SCOPE_POWER_SERVER_OFF_SERVER);
+    }
 }

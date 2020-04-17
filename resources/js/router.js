@@ -27,7 +27,6 @@ const authenticatedRoute = (path, pathToComponent, extraOptions = {}) => {
     }, extraOptions))
 };
 
-
 export default [
     route('/', './routes/Base', {
         props: true,
@@ -37,6 +36,23 @@ export default [
             unauthenticatedRoute('/register', './routes/Auth/Register'),
 
             authenticatedRoute('/hypervisors', './routes/App/Hypervisors'),
+            authenticatedRoute('/servers', './routes/App/Servers/Index', {
+                props: true,
+                children: [
+                    authenticatedRoute('/servers', './routes/App/Servers/Servers'),
+                    authenticatedRoute('/servers/link', './routes/App/Servers/Link', {
+                        props: true,
+                    }),
+                    authenticatedRoute('/servers/:id', './routes/App/Servers/Server'),
+                ]
+            }),
+            authenticatedRoute('/settings', './routes/App/Settings/Index', {
+                props: true,
+                children: [
+                    authenticatedRoute('/', './routes/App/Settings/Authorization'),
+                    authenticatedRoute('/settings/password', './routes/App/Settings/ResetPassword'),
+                ]
+            }),
 
             unauthenticatedRoute('*', './routes/UnknownRoute'),
         ],

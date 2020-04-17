@@ -12,7 +12,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ str_replace('//localhost:8080//', 'http://localhost:8080/', mix('css/app.css') )}}" rel="stylesheet">
 
     <style>
         [v-cloak] {
@@ -22,9 +22,10 @@
 </head>
 <body class="bg-gray-200 h-full antialiased leading-none">
 <div id="app" v-cloak class="h-full bg-gray-200">
-   <router-view></router-view>
+   <router-view url="{{ url('') }}"></router-view>
 </div>
 <!-- Scripts -->
-<script src="{{ mix('js/app.js') }}"></script>
+<script src="{{ str_replace('//localhost:8080//', 'http://localhost:8080/', mix('js/app.js')) }}" defer></script>
+
 </body>
 </html>

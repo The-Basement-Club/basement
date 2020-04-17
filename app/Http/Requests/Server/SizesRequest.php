@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests\Server;
 
+use App\Http\Requests\AbstractRequest;
 use App\Http\Requests\AuthorizedViaCredential;
-use App\Http\Requests\BuildValidatorForVendor;
 use App\Http\Requests\NoRules;
-use Illuminate\Foundation\Http\FormRequest;
 
-class SizesRequest extends FormRequest
+class SizesRequest extends AbstractRequest
 {
-    use AuthorizedViaCredential, NoRules;
+    use NoRules, AuthorizedViaCredential;
 }
