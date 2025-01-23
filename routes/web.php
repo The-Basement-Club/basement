@@ -21,4 +21,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/manage', function () {
+        return Inertia::render('Manage');
+    })->name('manage');
 });
