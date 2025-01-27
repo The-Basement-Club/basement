@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Jobs\Registrar\CloudflareSyncJob;
 use App\Jobs\Registrar\NamecheapSyncJob;
+use App\Jobs\Registrar\Route53RegistrarSyncJob;
 use App\Models\Credential;
 use App\Models\User;
 use Illuminate\Bus\Batchable;
@@ -40,15 +41,20 @@ class FetchRegistrarForCredential implements ShouldQueue
         if ($this->batch()?->cancelled()) {
             return;
         }
-        if ($this->credential->type !== Credential::TYPE_REGISTRAR) {
-            info('Credential is not of registrar type.');
 
-            return;
-        }
-
-        $this->batch()->add([match ($this->credential->service) {
+        $this->queueJobs([match ($this->credential->service) {
             Credential::NAMECHEAP => new NamecheapSyncJob($this->credential, $this->user),
             Credential::CLOUDFLARE => new CloudflareSyncJob($this->credential, $this->user),
+            Credential::ROUTE53 => new Route53RegistrarSyncJob($this->credential, $this->user),
         }]);
+    }
+
+    protected function queueJobs(array $jobs): void
+    {
+        if ($this->batch()) {
+            $this->batch()->add($jobs);
+        } else {
+            collect($jobs)->map(fn ($job) => dispatch($job));
+        }
     }
 }

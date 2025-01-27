@@ -3,6 +3,7 @@
 namespace App\Nova\Actions;
 
 use App\Jobs\FetchDomainsForCredential;
+use App\Jobs\FetchRegistrarForCredential;
 use App\Models\Credential;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\PendingBatch;
@@ -18,7 +19,7 @@ use Laravel\Nova\Contracts\BatchableAction;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class SyncResourcesFromCredential extends Action implements ShouldQueue
+class SyncDomainResourcesFromCredential extends Action implements ShouldQueue
 {
     use Batchable;
     use InteractsWithQueue;
@@ -41,7 +42,7 @@ class SyncResourcesFromCredential extends Action implements ShouldQueue
             Bus::batch(
                 $models->map(fn(Credential $model) => new FetchDomainsForCredential($model))->toArray()
             )
-                ->name('Sync Resources From Credential')
+                ->name('Sync Domains From Credential')
                 ->dispatch();
         }
     }

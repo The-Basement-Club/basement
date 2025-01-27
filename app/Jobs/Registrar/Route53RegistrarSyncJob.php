@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Jobs\Registrar;
 
 use App\Events\Models\Domain\DomainCreated;
+use App\Jobs\Credential;
+use App\Jobs\User;
 use App\Models\Domain;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-class CloudflareSyncJob extends AbstractSyncRegistrarResourceJob
+class Route53RegistrarSyncJob extends AbstractSyncRegistrarResourceJob
 {
     public function sync(): void
     {

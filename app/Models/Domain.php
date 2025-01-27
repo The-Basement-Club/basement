@@ -13,6 +13,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+/**
+ * @property \App\Models\DomainRecord $records
+ * @property \App\Models\Credential $credential
+ */
 class Domain extends Model
 {
     /** @use HasFactory<\Database\Factories\DomainFactory> */

@@ -21,6 +21,7 @@ class Credential extends Model
     public const CLOUDFLARE = 'cloudflare';
 
     public const NAMECHEAP = 'namecheap';
+    public const ROUTE53 = 'route53';
     public const TYPE_SERVER = 'server';
 
     public const TYPE_DOMAIN = 'domain';
@@ -93,5 +94,10 @@ class Credential extends Model
     public function getPasskey(): string
     {
         return decrypt($this->settings['pass_key'] ?? '');
+    }
+
+    public function domains()
+    {
+        return $this->hasMany(Domain::class);
     }
 }

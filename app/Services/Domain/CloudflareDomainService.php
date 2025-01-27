@@ -145,13 +145,25 @@ class CloudflareDomainService implements CloudflareDomainServiceContract
         );
     }
 
-    public function createDnsRecord(string $domain, array $dnsRecordArray): void
-    {
+    public function createDnsRecord(
+        string $domainIdentifier,
+        string $targetDomain,
+        string $value,
+        string $type = 'A',
+        string $ttl = '300',
+        string $comment = ''
+    ): void {
         $response = Http::withHeaders([
             'X-Auth-Key' => $this->apiKey,
             'x-auth-email' => $this->email,
             'content-type' => 'application/json',
-        ])->post(static::CLOUDFLARE_URL."/zones/$domain/dns_records", $dnsRecordArray);
+        ])->post(static::CLOUDFLARE_URL."/zones/$domainIdentifier/dns_records", [
+            'type' => $type,
+            'comment' => $comment,
+            'name' => $targetDomain,
+            'content' => $value,
+            'ttl' => $ttl,
+        ]);
 
         $id = $response->json('result.id');
 

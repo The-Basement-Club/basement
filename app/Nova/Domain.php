@@ -50,7 +50,7 @@ class Domain extends Resource
             Text::make('domain_id')->hideFromIndex()->hideWhenCreating(),
             Text::make('cloudflare_id')->hideFromIndex()->hideWhenCreating(),
             DateTime::make('registered_at'),
-            DateTime::make('expires_at'),
+            DateTime::make('expires_at')->sortable(),
 
             HasMany::make('records', 'records', DomainRecord::class),
         ];

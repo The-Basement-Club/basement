@@ -6,6 +6,7 @@ namespace App\Services\Factories;
 
 use App\Contracts\Services\RegistrarServiceContract;
 use App\Models\Credential;
+use App\Services\Domain\Route53DomainService;
 use App\Services\Registrar\CloudflareRegistrarService;
 use App\Services\Registrar\NamecheapService;
 
@@ -16,6 +17,7 @@ class RegistrarServiceFactory
         return match ($credential->service) {
             Credential::NAMECHEAP => new NamecheapService($credential),
             Credential::CLOUDFLARE => new CloudflareRegistrarService($credential),
+            Credential::ROUTE53 => new Route53DomainService($credential),
         };
     }
 }

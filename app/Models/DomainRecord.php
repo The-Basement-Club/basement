@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property \App\Models\Domain $domain
+ */
 class DomainRecord extends Model
 {
     /** @use HasFactory<\Database\Factories\DomainRecordFactory> */
@@ -38,6 +41,15 @@ class DomainRecord extends Model
         'updating' => DomainRecordUpdating::class,
         'updated' => DomainRecordUpdated::class,
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'ttl' => 'integer',
+            'timeout' => 'integer',
+            'proxied_through_cloudflare' => 'boolean',
+        ];
+    }
 
     public function domain(): BelongsTo
     {

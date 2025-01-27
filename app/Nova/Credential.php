@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -54,6 +55,7 @@ class Credential extends Resource
             Select::make('service')->options([
                 'cloudflare' => 'Cloudflare',
                 'namecheap' => 'Namecheap',
+                'route53' => 'Route53',
             ])->sortable(),
             Text::make('api_key')->sortable()->hideFromIndex(),
             Text::make('secret_key')->hideFromIndex(),
@@ -62,6 +64,8 @@ class Credential extends Resource
 
             Code::make('settings')->json(),
             Date::make('enabled_on'),
+
+            HasMany::make('Domains'),
         ];
     }
 
@@ -103,7 +107,8 @@ class Credential extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
-            new Actions\SyncResourcesFromCredential,
+            new Actions\SyncRegistrarResourcesFromCredential,
+            new Actions\SyncDomainResourcesFromCredential,
         ];
     }
 }

@@ -6,6 +6,7 @@ namespace App\Jobs;
 
 use App\Jobs\Domains\CloudflareSyncAndPurgeJob;
 use App\Jobs\Domains\DigitalOceanDomainsSyncJob;
+use App\Jobs\Domains\Route53SyncJob;
 use App\Jobs\Registrar\NamecheapSyncJob;
 use App\Models\Credential;
 use App\Models\User;
@@ -41,14 +42,12 @@ class FetchDomainsForCredential implements ShouldQueue
         if ($this->batch()?->cancelled()) {
             return;
         }
-        if ($this->credential->type !== Credential::TYPE_DOMAIN) {
-            return;
-        }
 
         $this->batch()->add([match ($this->credential->service) {
             Credential::CLOUDFLARE => new CloudflareSyncAndPurgeJob($this->credential, $this->user),
             Credential::DIGITAL_OCEAN => new DigitalOceanDomainsSyncJob($this->credential, $this->user),
             Credential::NAMECHEAP => new NamecheapSyncJob($this->credential, $this->user),
+            Credential::ROUTE53 => new Route53SyncJob($this->credential, $this->user),
         }]);
     }
 }
