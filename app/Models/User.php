@@ -70,4 +70,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Credential::class);
     }
+
+    public function domains()
+    {
+        return $this->hasManyThrough(Domain::class, Credential::class);
+    }
+
+    public function servers()
+    {
+        return $this->hasManyThrough(Server::class, Credential::class);
+    }
 }

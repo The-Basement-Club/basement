@@ -2,6 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Credential;
+use App\Models\Domain;
+use App\Models\DomainRecord;
+use App\Models\JobBatch;
+use App\Models\Server;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,8 +40,25 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $modelsAndEvents = [
+            Credential::class => [],
+            Domain::class => [],
+            DomainRecord::class => [],
+            Server::class => [],
+            JobBatch::class => [],
+        ];
+
+        $modelsAndEvents = array_map(
+            fn ($model, $key) => [
+                'model' => $key,
+                'events' => (new $key)->dispatchesEvents,
+            ],
+            $modelsAndEvents,
+            array_keys($modelsAndEvents)
+        );
+
         return array_merge(parent::share($request), [
-            //
+            'models_and_events' =>  $modelsAndEvents
         ]);
     }
 }

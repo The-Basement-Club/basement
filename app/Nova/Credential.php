@@ -49,13 +49,15 @@ class Credential extends Resource
             Text::make('name')->sortable(),
             BelongsTo::make('user')->sortable(),
             Select::make('type')->options([
-                'dns' => 'DNS',
+                'registrar' => 'Registrar',
                 'domain' => 'Domain',
+                'server' => 'Server',
             ])->sortable(),
             Select::make('service')->options([
                 'cloudflare' => 'Cloudflare',
                 'namecheap' => 'Namecheap',
                 'route53' => 'Route53',
+                'digitalocean' => 'DigitalOcean',
             ])->sortable(),
             Text::make('api_key')->sortable()->hideFromIndex(),
             Text::make('secret_key')->hideFromIndex(),
@@ -66,6 +68,7 @@ class Credential extends Resource
             Date::make('enabled_on'),
 
             HasMany::make('Domains'),
+            HasMany::make('Servers'),
         ];
     }
 
@@ -107,6 +110,7 @@ class Credential extends Resource
     public function actions(NovaRequest $request): array
     {
         return [
+            new Actions\SyncServerResourcesFromCredential,
             new Actions\SyncRegistrarResourcesFromCredential,
             new Actions\SyncDomainResourcesFromCredential,
         ];

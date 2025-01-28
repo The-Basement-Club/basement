@@ -53,7 +53,15 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
     && apt-get -y autoremove \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && apt-get install -y cron screen
+COPY basecron /etc/cron.d/basecron
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/basecron
+RUN crontab /etc/cron.d/basecron
+# So I want to remove the cron service from the container, because
+# I'll have supervisord running the cron service for better logging.
+RUN update-rc.d cron remove
 
 RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.4
 
@@ -67,5 +75,6 @@ COPY php.ini /etc/php/8.4/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 
 EXPOSE 80/tcp
+EXPOSE 6001/tcp
 
 ENTRYPOINT ["start-container"]

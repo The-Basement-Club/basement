@@ -19,7 +19,17 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'expiring_domains' => request()->user()
+                ->domains()
+                ->where('expires_at', '>', now())
+                ->where('expires_at', '<=', now()->addMonths(3))
+                ->orderBy('expires_at')
+                ->get(),
+            'domain_count' => request()->user()->domains()->count(),
+            'server_count' => request()->user()->servers()->count(),
+            'servers' => request()->user()->servers()->get(),
+        ]);
     })->name('dashboard');
 
     Route::get('/manage', function () {

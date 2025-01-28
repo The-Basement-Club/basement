@@ -48,7 +48,7 @@ class FetchServersForCredential implements ShouldQueue
         $this->batch()->add([match ($this->credential->service) {
             Credential::DIGITAL_OCEAN => new DigitalOceanSyncJob($this->credential, $this->user),
 
-            default => throw new NotImplementedException('Service not implemented: '. $this.$this->credential->service),
+            default => throw new NotImplementedException('Service not implemented: '.$this->credential->service),
         }]);
     }
 }

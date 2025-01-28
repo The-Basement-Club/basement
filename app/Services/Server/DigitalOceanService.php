@@ -144,7 +144,7 @@ class DigitalOceanService implements DigitalOceanServiceContract
         // TODO: Implement deleteDnsRecord() method.
     }
 
-    public function createDnsRecord(string $domainIdentifier, array $dnsRecordArray): void
+    public function createDnsRecord(string $domainIdentifier, string $targetDomain, string $value, string $type = 'A', string $ttl = '300', string $comment = ''): void
     {
         // TODO: Implement createDnsRecord() method.
     }

@@ -16,7 +16,7 @@ class Credential extends Model
 {
     /** @use HasFactory<\Database\Factories\CredentialFactory> */
     use HasFactory;
-    public const DIGITAL_OCEAN = 'digital-ocean';
+    public const DIGITAL_OCEAN = 'digitalocean';
 
     public const CLOUDFLARE = 'cloudflare';
 
@@ -99,5 +99,10 @@ class Credential extends Model
     public function domains()
     {
         return $this->hasMany(Domain::class);
+    }
+
+    public function servers()
+    {
+        return $this->hasMany(Server::class);
     }
 }
